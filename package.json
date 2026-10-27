@@ -1,0 +1,52 @@
+{
+  "name": "nba-live-desktop",
+  "productName": "篮下 NBA 图文直播",
+  "version": "1.7.7",
+  "description": "苹果风格的 NBA 中文实时图文直播桌面应用",
+  "main": "src/main.js",
+  "author": "Codex",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "dist": "electron-builder --win nsis portable",
+    "dist:dir": "electron-builder --win --dir"
+  },
+  "devDependencies": {
+    "electron": "45.0.0",
+    "electron-builder": "26.18.0"
+  },
+  "build": {
+    "appId": "cn.lanxia.nba.live",
+    "productName": "篮下 NBA 图文直播",
+    "asar": true,
+    "directories": {
+      "output": "release",
+      "buildResources": "build"
+    },
+    "files": [
+      "src/**/*",
+      "package.json",
+      "LICENSE",
+      "THIRD_PARTY_NOTICES.md"
+    ],
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ],
+      "icon": "build/icon.png"
+    },
+    "nsis": {
+      "artifactName": "篮下NBA图文直播-${version}-${arch}-安装版.${ext}",
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "篮下 NBA 图文直播"
+    },
+    "portable": {
+      "artifactName": "篮下NBA图文直播-${version}-${arch}-便携版.${ext}"
+    }
+  }
+}

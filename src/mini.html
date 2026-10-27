@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; img-src 'self' data: https://a.espncdn.com https://*.espncdn.com https://espnmedia-cdn.akamaized.net https://*.akamaized.net; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'none'; font-src 'self';"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>比赛速览</title>
+    <link rel="stylesheet" href="./mini.css?v=1.7.4" />
+  </head>
+  <body>
+    <svg class="svg-sprite" aria-hidden="true">
+      <symbol id="icon-ball" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="9" />
+        <path d="M3.5 12h17M12 3.2v17.6M5.8 5.8c3.7 3.3 3.7 9.1 0 12.4M18.2 5.8c-3.7 3.3-3.7 9.1 0 12.4" />
+      </symbol>
+      <symbol id="icon-expand" viewBox="0 0 24 24">
+        <path d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5" />
+      </symbol>
+      <symbol id="icon-chevron-left" viewBox="0 0 24 24">
+        <path d="m14.5 5-7 7 7 7" />
+      </symbol>
+      <symbol id="icon-chevron-right" viewBox="0 0 24 24">
+        <path d="m9.5 5 7 7-7 7" />
+      </symbol>
+      <symbol id="icon-pin" viewBox="0 0 24 24">
+        <path d="M9 3h6l-1 5 3 3v2H7v-2l3-3-1-5ZM12 13v8" />
+      </symbol>
+    </svg>
+
+    <div class="ambient ambient-warm"></div>
+    <div class="ambient ambient-cool"></div>
+
+    <div class="mini-frame" id="miniFrame">
+      <div class="mini-shell">
+        <header class="mini-titlebar">
+          <div class="status-pill" id="statusPill">
+            <span class="live-dot" id="liveDot"></span>
+            <span id="statusText">等待比赛</span>
+          </div>
+
+          <div class="titlebar-actions">
+            <span class="game-position" id="gamePosition" aria-live="polite">–</span>
+
+            <button
+              class="pin-button"
+              id="pinButton"
+              type="button"
+              aria-label="固定桌面"
+              aria-pressed="false"
+              title="固定桌面"
+            >
+              <svg><use href="#icon-pin"></use></svg>
+            </button>
+
+            <button
+              class="expand-button"
+              id="showMainButton"
+              type="button"
+              title="切换到大窗口"
+            >
+              <svg><use href="#icon-expand"></use></svg>
+              <span>大窗口</span>
+            </button>
+          </div>
+        </header>
+
+        <main class="mini-main">
+          <button
+            class="game-nav game-nav-previous"
+            id="previousGameButton"
+            type="button"
+            aria-label="上一场比赛"
+            title="上一场比赛"
+          >
+            <svg><use href="#icon-chevron-left"></use></svg>
+          </button>
+
+          <section class="score-card" id="scoreCard">
+            <div class="mini-team mini-team-away">
+              <img id="awayLogo" alt="" />
+              <strong id="awayName">--</strong>
+            </div>
+
+            <div class="mini-score">
+              <div class="score-line">
+                <span id="awayScore">–</span>
+                <i>:</i>
+                <span id="homeScore">–</span>
+              </div>
+              <span class="game-clock" id="gameClock">比赛尚未开始</span>
+            </div>
+
+            <div class="mini-team mini-team-home">
+              <strong id="homeName">--</strong>
+              <img id="homeLogo" alt="" />
+            </div>
+          </section>
+
+          <button
+            class="game-nav game-nav-next"
+            id="nextGameButton"
+            type="button"
+            aria-label="下一场比赛"
+            title="下一场比赛"
+          >
+            <svg><use href="#icon-chevron-right"></use></svg>
+          </button>
+
+          <section class="latest-panel">
+            <span class="latest-label">最新</span>
+            <div class="live-lines" id="liveLines" aria-live="polite"></div>
+            <div class="panel-empty is-hidden" id="liveEmpty">
+              <strong id="liveEmptyTitle">等待比赛动态</strong>
+              <span id="liveEmptyText">开赛后将持续更新中文赛况</span>
+            </div>
+          </section>
+        </main>
+      </div>
+
+      <div class="loading-layer" id="loadingLayer">
+        <div class="loading-dots">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <span>正在同步赛况</span>
+      </div>
+      <div class="toast" id="toast" role="status"></div>
+    </div>
+
+    <script src="./player-names.js"></script>
+    <script src="./mini.js?v=1.7.4"></script>
+  </body>
+</html>

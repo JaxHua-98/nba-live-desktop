@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; img-src 'self' data: https://a.espncdn.com https://*.espncdn.com https://espnmedia-cdn.akamaized.net https://*.akamaized.net; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'none'; font-src 'self';"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>篮下 NBA 图文直播</title>
+    <link rel="stylesheet" href="./styles.css?v=1.7.7" />
+  </head>
+  <body>
+    <svg class="svg-sprite" aria-hidden="true">
+      <symbol id="icon-chevron-left" viewBox="0 0 24 24">
+        <path d="m14.5 5-7 7 7 7" />
+      </symbol>
+      <symbol id="icon-chevron-right" viewBox="0 0 24 24">
+        <path d="m9.5 5 7 7-7 7" />
+      </symbol>
+      <symbol id="icon-pin" viewBox="0 0 24 24">
+        <path d="m14 4 6 6-3 1-4 4-1 5-2-2-5-5-2-2 5-1 4-4 2-2Z" />
+        <path d="m5 19 4-4" />
+      </symbol>
+      <symbol id="icon-refresh" viewBox="0 0 24 24">
+        <path d="M20 11a8 8 0 1 0-2.3 5.7" />
+        <path d="M20 5v6h-6" />
+      </symbol>
+      <symbol id="icon-ball" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="9" />
+        <path d="M3.5 12h17M12 3.2v17.6M5.8 5.8c3.7 3.3 3.7 9.1 0 12.4M18.2 5.8c-3.7 3.3-3.7 9.1 0 12.4" />
+      </symbol>
+      <symbol id="icon-bolt" viewBox="0 0 24 24">
+        <path d="m13.5 2-8 12h6l-1 8 8-12h-6l1-8Z" />
+      </symbol>
+      <symbol id="icon-image" viewBox="0 0 24 24">
+        <rect x="3" y="4" width="18" height="16" rx="3" />
+        <circle cx="8.5" cy="9" r="1.5" />
+        <path d="m4 17 5-5 4 4 2-2 5 5" />
+      </symbol>
+      <symbol id="icon-mini" viewBox="0 0 24 24">
+        <rect x="3" y="4" width="18" height="16" rx="3" />
+        <rect x="11.5" y="10.5" width="7.5" height="6.5" rx="1.5" />
+      </symbol>
+      <symbol id="icon-user" viewBox="0 0 24 24">
+        <circle cx="12" cy="8" r="4" />
+        <path d="M4.5 21a7.5 7.5 0 0 1 15 0" />
+      </symbol>
+    </svg>
+
+    <div class="ambient ambient-one"></div>
+    <div class="ambient ambient-two"></div>
+    <div class="ambient ambient-three"></div>
+
+    <div class="window-frame" id="windowFrame">
+      <div class="app-shell">
+        <header class="titlebar">
+          <div class="window-dots" aria-label="窗口控制">
+            <button
+              class="window-dot window-dot-close"
+              id="closeButton"
+              type="button"
+              aria-label="关闭"
+            >
+              <span aria-hidden="true"></span>
+            </button>
+            <button
+              class="window-dot window-dot-minimize"
+              id="minimizeButton"
+              type="button"
+              aria-label="最小化"
+            >
+              <span aria-hidden="true"></span>
+            </button>
+            <button
+              class="window-dot window-dot-maximize"
+              id="maximizeButton"
+              type="button"
+              aria-label="最大化"
+            >
+              <span aria-hidden="true"></span>
+            </button>
+          </div>
+
+          <div class="app-identity">
+            <span class="app-mark">
+              <svg><use href="#icon-ball"></use></svg>
+            </span>
+            <span class="app-name">篮下</span>
+            <span class="title-divider"></span>
+            <span class="app-subtitle">NBA 图文直播</span>
+          </div>
+
+          <div class="titlebar-tools">
+            <span class="beijing-clock" id="beijingClock">北京时间 --:--</span>
+            <button
+              class="tool-pill mini-switch"
+              id="miniButton"
+              type="button"
+              title="切换到迷你窗"
+            >
+              <svg><use href="#icon-mini"></use></svg>
+              <span>迷你窗</span>
+            </button>
+            <button
+              class="tool-pill"
+              id="pinButton"
+              type="button"
+              aria-pressed="false"
+            >
+              <svg><use href="#icon-pin"></use></svg>
+              <span>置顶</span>
+            </button>
+            <span class="titlebar-avatar" aria-hidden="true">
+              <svg><use href="#icon-user"></use></svg>
+            </span>
+          </div>
+        </header>
+
+        <main class="main-grid">
+          <section class="primary-column">
+            <article class="score-card" id="scoreCard">
+              <div class="court-lines" aria-hidden="true">
+                <span class="court-circle"></span>
+                <span class="court-half"></span>
+              </div>
+
+              <div class="score-card-top">
+                <div class="score-context">
+                  <span class="season-pill" id="seasonPill">常规赛</span>
+                  <span class="score-date" id="gameDate">北京时间 --</span>
+                </div>
+              </div>
+
+              <div class="scoreboard" id="scoreboard">
+                <div class="team team-away" id="awayTeam">
+                  <div class="team-emblem">
+                    <span class="team-glow"></span>
+                    <img id="awayLogo" alt="" />
+                  </div>
+                  <div class="team-copy">
+                    <span class="team-side">客队</span>
+                    <h2 id="awayName">--</h2>
+                    <span class="team-record" id="awayRecord">战绩 --</span>
+                  </div>
+                </div>
+
+                <div class="score-center">
+                  <div class="status-badge status-loading" id="statusBadge">
+                    <span class="status-dot"></span>
+                    <span id="statusText">正在载入</span>
+                  </div>
+                  <div class="score-line">
+                    <span class="score-number" id="awayScore">--</span>
+                    <span class="score-separator">:</span>
+                    <span class="score-number" id="homeScore">--</span>
+                  </div>
+                  <div class="game-clock" id="gameClock">比赛尚未开始</div>
+                </div>
+
+                <div class="team team-home" id="homeTeam">
+                  <div class="team-copy">
+                    <span class="team-side">主队</span>
+                    <h2 id="homeName">--</h2>
+                    <span class="team-record" id="homeRecord">战绩 --</span>
+                  </div>
+                  <div class="team-emblem">
+                    <span class="team-glow"></span>
+                    <img id="homeLogo" alt="" />
+                  </div>
+                </div>
+              </div>
+
+              <div class="score-card-bottom">
+                <div class="quarter-strip" id="quarterStrip"></div>
+                <div class="update-stamp">
+                  <span class="live-pulse" id="livePulse"></span>
+                  <span id="updateStamp">等待数据</span>
+                </div>
+              </div>
+            </article>
+
+            <section class="feed-panel">
+              <header class="feed-header">
+                <div>
+                  <div class="section-kicker">
+                    <span class="kicker-mark"></span>
+                    <span id="contentKicker">比赛现场</span>
+                  </div>
+                  <h1 id="contentTitle">图文直播</h1>
+                </div>
+                <div class="feed-actions">
+                  <div class="segmented-control" id="feedTabs">
+                    <button class="segment is-active" data-view="live" type="button">
+                      全部
+                    </button>
+                    <button class="segment" data-view="stats" type="button">
+                      统计
+                    </button>
+                    <button class="segment" data-view="news" type="button">
+                      新闻
+                    </button>
+                  </div>
+                  <button
+                    class="icon-button"
+                    id="refreshButton"
+                    type="button"
+                    aria-label="立即刷新"
+                    title="立即刷新"
+                  >
+                    <svg><use href="#icon-refresh"></use></svg>
+                  </button>
+                </div>
+              </header>
+
+              <div class="feed-meta">
+                <span id="feedSummary">正在读取比赛动态</span>
+                <span class="refresh-mode" id="refreshMode">
+                  <span class="refresh-dot"></span>
+                  自动刷新
+                </span>
+              </div>
+
+              <div class="feed-wrap">
+                <div class="content-view live-view is-active" id="liveView">
+                  <div class="feed" id="feed" aria-live="polite"></div>
+                  <div class="feed-empty is-hidden" id="feedEmpty">
+                    <span class="empty-icon">
+                      <svg><use href="#icon-bolt"></use></svg>
+                    </span>
+                    <strong id="emptyTitle">比赛尚未开始</strong>
+                    <p id="emptyText">开赛后，这里会持续更新中文图文动态。</p>
+                  </div>
+                  <button
+                    class="new-pill is-hidden"
+                    id="newPill"
+                    type="button"
+                  >
+                    <span class="new-pill-dot"></span>
+                    有新的直播动态
+                  </button>
+                </div>
+
+                <div
+                  class="content-view stats-view"
+                  id="statsView"
+                  aria-hidden="true"
+                >
+                  <div class="stats-toolbar">
+                    <div class="stats-heading">
+                      <span>实时球员数据</span>
+                      <strong id="playerStatsTitle">本场表现</strong>
+                    </div>
+                    <span class="players-updated" id="playerStatsUpdated">
+                      赛中更新
+                    </span>
+                  </div>
+                  <div class="player-team-tabs" id="playerTeamTabs"></div>
+                  <div class="stats-table">
+                    <div class="player-table-head" aria-hidden="true">
+                      <span>球员</span>
+                      <span>时间</span>
+                      <span>得分</span>
+                      <span>篮板</span>
+                      <span>助攻</span>
+                      <span>抢断</span>
+                      <span>盖帽</span>
+                      <span>投篮</span>
+                      <span>三分</span>
+                      <span>罚球</span>
+                      <span>失误</span>
+                      <span>犯规</span>
+                      <span>+/-</span>
+                    </div>
+                    <div class="player-stats-list" id="playerStatsList"></div>
+                  </div>
+                  <div
+                    class="player-stats-empty is-hidden"
+                    id="playerStatsEmpty"
+                  >
+                    开赛后更新球员数据
+                  </div>
+                </div>
+
+                <div
+                  class="content-view news-view"
+                  id="newsView"
+                  aria-hidden="true"
+                >
+                  <div class="news-grid" id="newsGrid"></div>
+                  <div class="news-empty is-hidden" id="newsEmpty">
+                    <span class="empty-icon">
+                      <svg><use href="#icon-bolt"></use></svg>
+                    </span>
+                    <strong>暂无球队新闻简报</strong>
+                    <p>新闻服务暂时没有返回本场双方的近期报道。</p>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </section>
+
+          <aside class="sidebar">
+            <section class="schedule-panel">
+              <header class="sidebar-header">
+                <div>
+                  <div class="section-kicker">
+                    <span class="kicker-mark"></span>
+                    联盟动态
+                  </div>
+                  <h2>赛程</h2>
+                </div>
+                <button
+                  class="today-button"
+                  id="todayButton"
+                  type="button"
+                >
+                  今天
+                </button>
+              </header>
+
+              <div class="date-navigator">
+                <button
+                  class="date-button"
+                  id="previousDay"
+                  type="button"
+                  aria-label="前一天"
+                >
+                  <svg><use href="#icon-chevron-left"></use></svg>
+                </button>
+                <div class="date-copy">
+                  <strong id="scheduleDate">10月26日</strong>
+                  <span id="scheduleWeekday">周一 · 北京时间</span>
+                </div>
+                <button
+                  class="date-button"
+                  id="nextDay"
+                  type="button"
+                  aria-label="后一天"
+                >
+                  <svg><use href="#icon-chevron-right"></use></svg>
+                </button>
+              </div>
+
+              <div class="schedule-list" id="scheduleList"></div>
+            </section>
+
+            <section class="standings-panel">
+              <header class="standings-header">
+                <div>
+                  <div class="section-kicker">
+                    <span class="kicker-mark"></span>
+                    常规赛
+                  </div>
+                  <h2>球队榜</h2>
+                </div>
+                <span class="standings-season" id="standingsSeason">
+                  东西部排名
+                </span>
+              </header>
+
+              <div
+                class="standings-tabs"
+                id="standingsTabs"
+                role="tablist"
+                aria-label="东西部球队排名"
+              >
+                <button
+                  class="standings-tab is-active"
+                  data-conference="east"
+                  type="button"
+                  role="tab"
+                  aria-selected="true"
+                >
+                  东部
+                </button>
+                <button
+                  class="standings-tab"
+                  data-conference="west"
+                  type="button"
+                  role="tab"
+                  aria-selected="false"
+                >
+                  西部
+                </button>
+              </div>
+
+              <div class="standings-table">
+                <div class="standings-table-head" aria-hidden="true">
+                  <span>排名</span>
+                  <span>球队</span>
+                  <span>胜-负</span>
+                  <span>胜率</span>
+                  <span>胜差</span>
+                </div>
+                <div class="standings-list" id="standingsList"></div>
+              </div>
+              <div class="standings-empty is-hidden" id="standingsEmpty">
+                排名暂时不可用
+              </div>
+            </section>
+
+            <section class="connection-card">
+              <div class="connection-icon">
+                <svg><use href="#icon-refresh"></use></svg>
+              </div>
+              <div class="connection-copy">
+                <strong id="connectionTitle">直播持续同步</strong>
+                <span id="connectionText">比赛进行中每 3 秒同步</span>
+              </div>
+              <button
+                class="toggle"
+                id="autoRefreshToggle"
+                type="button"
+                role="switch"
+                aria-checked="true"
+                aria-label="自动刷新"
+              >
+                <span></span>
+              </button>
+            </section>
+          </aside>
+        </main>
+
+        <footer class="app-footer">
+          <span>比赛时间均为中国大陆时间</span>
+          <span class="footer-separator"></span>
+          <span>文字由结构化赛事数据生成</span>
+        </footer>
+      </div>
+
+      <div class="loading-layer" id="loadingLayer">
+        <div class="loading-mark">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <span>正在连接赛场</span>
+      </div>
+
+      <div class="toast" id="toast" role="status"></div>
+    </div>
+
+    <script src="./player-names.js"></script>
+    <script src="./app.js?v=1.7.7"></script>
+  </body>
+</html>

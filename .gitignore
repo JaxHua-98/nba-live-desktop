@@ -1,0 +1,29 @@
+# Dependencies and build output
+node_modules/
+release/
+build/icon-source.png
+build/icon.svg
+
+# Local tooling, browser test profiles, and temporary downloads
+work/cdp-profile-*/
+work/gh-cli/
+work/gh.zip
+work/make-icon.js
+work/icon-on-dark.png
+work/packaged-icon.png
+work/exe-icon.png
+work/preview-stats-live.png
+
+# Intermediate screenshots
+preview-mini-live.png
+preview-quarter-table-min.png
+preview-quarter-table-packaged.png
+preview-stats-min.png
+preview-stats-packaged.png
+preview-logo.png
+
+# Local and OS files
+$null
+*.log
+Thumbs.db
+.DS_Store
